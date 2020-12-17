@@ -1,5 +1,7 @@
 const express=require("express");
 const app=express();
+//models
+const User=require("../backend/models/User")
 //mongoose
 const mongoose=require("mongoose");
 
@@ -16,7 +18,12 @@ app.use(express.json());
 //register
 app.post("/api/users/register",async (req,res)=>{
     try{
-        console.log(req.body)
+        
+        const {name,email,password}= req.body;
+        const user=await User.create({name,email,password});
+        console.log(user);
+        res.send(user);
+         
     } catch (error){
 
     }
