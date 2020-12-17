@@ -19,17 +19,7 @@ app.use(express.json());
 //routes
 //register
 app.use("/api/users",router);
- app.post("/api/users/login",(req,res)=>{
- res.send("login");
-})
-//update
-app.put("/api/users/update",(req,res)=>{
-    res.send("update");
-   })
-   // delete
-   app.delete("/api/users/:id",(req,res)=>{
-       res.send("delete");
-   })
+
 //server
 const PORT=process.env.PORT || 5050;
 
