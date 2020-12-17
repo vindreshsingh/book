@@ -7,6 +7,7 @@ const dotenv=require("dotenv");
 //error handler
 const error=require("./middlewares/errorMiddleware")
 //router
+const bookRouter=require('./routes/bookRoutes');
 const router=require("../backend/routes/userRoute")
 //mongoose
 const mongoose=require("mongoose");
@@ -22,6 +23,7 @@ console.log("Connected to MongoDB successfully!"))
 //passing data
 app.use(express.json());
 //routes
+app.use('/api/book',bookRouter);
 //register
 app.use("/api/users",router);
 //error middleware
