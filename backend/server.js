@@ -2,6 +2,8 @@ const express=require("express");
 const app=express();
 //models
 const User=require("../backend/models/User")
+//error handler
+const error=require("./middlewares/errorMiddleware")
 //router
 const router=require("../backend/routes/userRoute")
 //mongoose
@@ -19,6 +21,8 @@ app.use(express.json());
 //routes
 //register
 app.use("/api/users",router);
+//error middleware
+app.use(error.errorMiddlewareHandler)
 
 //server
 const PORT=process.env.PORT || 5050;

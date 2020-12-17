@@ -1,14 +1,16 @@
 const express=require("express");
 const router=express.Router();
+const asyncHandler=require("express-async-handler");
 const User =require("../models/User");
 
 //user register
-router.post("/register",async (req,res)=>{
+router.post("/register",asyncHandler(async (req,res)=>{
     try{
         
         const {name,email,password}= req.body;
         const userExit=await User.findOne({email:email});
         if(userExit){
+            console.log("error here")
             throw new Error("user exit");
         }
         const user=await User.create({name,email,password});
@@ -16,9 +18,10 @@ router.post("/register",async (req,res)=>{
         res.send(user);
          
     } catch (error){
-      throw new Error("Error creating");
+  //  res.send(error);
     }
 })
+)
 router.post("/login",(req,res)=>{
     res.send("login");
    })
