@@ -2,6 +2,8 @@ const express=require("express");
 const app=express();
 //models
 const User=require("../backend/models/User")
+//router
+const router=require("../backend/routes/userRoute")
 //mongoose
 const mongoose=require("mongoose");
 
@@ -16,19 +18,7 @@ console.log("Connected to MongoDB successfully!"))
 app.use(express.json());
 //routes
 //register
-app.post("/api/users/register",async (req,res)=>{
-    try{
-        
-        const {name,email,password}= req.body;
-        const user=await User.create({name,email,password});
-        console.log(user);
-        res.send(user);
-         
-    } catch (error){
-
-    }
-})
-// login
+app.use("/api/users",router);
  app.post("/api/users/login",(req,res)=>{
  res.send("login");
 })
