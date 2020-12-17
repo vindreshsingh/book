@@ -22,9 +22,28 @@ router.post("/register",asyncHandler(async (req,res)=>{
     }
 })
 )
-router.post("/login",(req,res)=>{
-    res.send("login");
+router.post("/login",asyncHandler(async (req,res)=>{
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if(user){
+        res.status(200);
+
+      res.json({
+        _id: user._id,
+        name: user.name,
+        password: user.password,
+        email: user.password,
+        token: generateToken(user._id),
+      });
+    }
+    else{
+        res.status(401);
+        throw new Error('Invalid credentials');
+    }
+
    })
+)
    //update
    router.put("/update",(req,res)=>{
        res.send("update");
