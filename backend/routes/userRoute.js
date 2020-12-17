@@ -2,6 +2,7 @@ const express=require("express");
 const router=express.Router();
 const asyncHandler=require("express-async-handler");
 const generateToken=require("../utils/generateToken");
+const authMiddleware=require("../middlewares/authMiddleware");
 const User =require("../models/User");
 
 //user register
@@ -50,13 +51,61 @@ router.post("/login",asyncHandler(async (req,res)=>{
 
    })
 )
-   //update
-   router.put("/update",(req,res)=>{
-       res.send("update");
-      })
-      // delete
-      router.delete("/:id",(req,res)=>{
-          res.send("delete");
-      })
+  //update user
+router.put(
+    '/update',
+    authMiddleware,
+    asyncHandler(async (req, res) => {
+      //Find the login user by ID
+      const user = await User.findById(req.user._id);
+  
+      if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        if (req.body.password) {
+          user.password = req.body.password || user.password;
+        }
+  
+        const updatedUser = await user.save();
+  
+        res.json({
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          token: generateToken(updatedUser._id),
+        });
+      }
+    })
+  );
+  
+  
+  //fetch Users
+  router.get(
+    '/',
+    authMiddleware,
+    asyncHandler(async (req, res) => {
+      const users = await User.find({});
+  
+      if (users) {
+        res.status(200).json(users);
+      } else {
+        res.status(500);
+  
+        throw new Error('No users found at the moment');
+      }
+    })
+  );
+  router.delete(
+    '/:id',
+    asyncHandler(async (req, res) => {
+      try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        res.status(200);
+        res.send(user);
+      } catch (error) {
+        res.json(error);
+      }
+    })
+  );
 
 module.exports=router;

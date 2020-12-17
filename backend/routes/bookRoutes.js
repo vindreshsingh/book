@@ -16,6 +16,21 @@ const bookRouter = express.Router();
          throw new Error("book creating failed");
      }
  }))
+ // fetch book details
+ bookRouter.get(
+    '/',
+    expressAsyncHandler(async (req, res) => {
+      const book = await Book.find({});
+  
+      if (book) {
+        res.status(200);
+        res.json(book);
+      } else {
+        res.status(500);
+        throw new Error('There are no books');
+      }
+    })
+  );
  bookRouter.put(
     '/:id',
     expressAsyncHandler(async (req, res) => {
